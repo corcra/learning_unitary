@@ -78,8 +78,12 @@ The `batch_size` and number of batches (`n_batches`) are defined in the `main` f
 
 People have commented that this approach is computationally expensive. This is true. However, my implementation is far from optimial. 
 
-For example, every time I calculate a gradient (in one of n*n directions) using finite differences, I call the `loss_function` of the specific model. If that model is `general_unitary`, this means calling `unitary_matrix()` on its list of parameters. This constructs the corresponding element of the Lie algebra using `lie_algebra_element()`, which in turn runs through the basis elements of the Lie algebra using `lie_algebra_basis_element()`, every time. Even though each time I'm only modifying _one_ parameter, and that one parameter corresponds to a specific Lie algebra basis element. Clearly, pre-computing the element of the Lie algebra and then modifying _that_ each time would save a lot of useless calculation. However, given how I've set up the rest of the code (everything happens through `loss_function()`, which doesn't care or know about intermediate Lie algebra elements) this is a bit tricky to achieve. 
+For example:
+  1. Every time I calculate a gradient (in one of n*n directions) using finite differences, I call the `loss_function` of the specific model.
+  2. If that model is `general_unitary`, this means calling `unitary_matrix()` (in `general_unitary_loss`) on a list of parameters.
+  3. This constructs the corresponding element of the Lie algebra using `lie_algebra_element()`...
+  4. ... which in turn runs through the basis elements of the Lie algebra using `lie_algebra_basis_element()`, _every time_.
+ 
+Even though each time I'm only modifying _one_ parameter, and that one parameter corresponds to a specific Lie algebra basis element. Clearly, pre-computing the element of the Lie algebra and then modifying _that_ each time would save a lot of useless calculation. However, given how I've set up the rest of the code (everything happens through `loss_function()`, which doesn't care or know about intermediate Lie algebra elements) this is a bit tricky to achieve. 
 
-Some (extensive) refactoring could go a long way, but this is (to me) a proof of concept, so for now it's not a high priority.
-
-One could also try to avoid using finite differences at all, which I _am_ working on. :)
+Some (extensive) refactoring could go a long way, but this was (to me) a proof of concept, so for now it's not a high priority.
