@@ -9,7 +9,7 @@
 # ------------------------------------------
 
 import numpy as np
-from unitary_np import unitary_matrix, complex_reflection
+from unitary_utils import unitary_matrix, complex_reflection
 from scipy.fftpack import fft, ifft
 from functools import partial
 from copy import deepcopy
