@@ -58,8 +58,8 @@ def complex_reflection(x, v_re, v_im, theano_reflection=False):
         d = np.outer(input_re_reflect_im + input_im_reflect_re, reflect_re)
         # outer(αν + βμ, mu)
 
-        output_re = input_re - 2. / vstarv * (d - c)
-        output_im = input_im - 2. / vstarv * (a + b)
+        output_re = input_re - 2. / vstarv * (a + b)
+        output_im = input_im - 2. / vstarv * (d - c)
 
         output = output_re + 1j*output_im
     else:
